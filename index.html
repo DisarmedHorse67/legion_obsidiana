@@ -106,7 +106,7 @@
     <div id="pantalla-comando" class="oculto">
         <h2 class="rojo">⚠️ ADVERTENCIA: PEM ARMADO ⚠️</h2>
         <p>TIEMPO ESTIMADO PARA DETONACIÓN: CRÍTICO</p>
-        <p>ACCESO ROOT CONCEDIDO. ESPERANDO PROTOCOLO DE ANULACIÓN...</p>
+        <p>ACCESO ROOT CONCEDIDO. ESPERANDO COMANDO...</p>
         <br>
         <div class="input-line">
             <span class="prompt">root@obsidiana:~#</span>
@@ -149,7 +149,7 @@
         let comandoLimpio = comandoReal.trim().toLowerCase().replace(/\s+/g, ' ');
         
         // El comando exacto que diseñamos
-        let comandoCorrecto = "kill_pem -bases anticitera_little -g 14 -k amor_bosque_rosa";
+        let comandoCorrecto = "kill_pem -n al -g 45 -k abr -a vpm";
 
         if (comandoLimpio === comandoCorrecto) {
             document.getElementById("pantalla-comando").classList.add("oculto");
