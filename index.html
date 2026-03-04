@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERMINAL OBSIDIANA</title>
+    <style>
+        body {
+            background-color: #050505;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1, h2 {
+            text-shadow: 0 0 5px #00ff00;
+            border-bottom: 1px dashed #00ff00;
+            padding-bottom: 10px;
+        }
+
+        .rojo { color: #ff3333; text-shadow: 0 0 5px #ff3333; }
+        .oculto { display: none; }
+        
+        /* Estilos de los inputs para que parezcan terminal */
+        input[type="text"], input[type="password"] {
+            background-color: transparent;
+            border: none;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            outline: none;
+            width: 80%;
+            margin-bottom: 10px;
+            text-transform: lowercase; /* Fuerza visualmente minúsculas */
+        }
+        
+        .input-line {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .prompt { margin-right: 10px; font-weight: bold; }
+        
+        /* Cursor parpadeante */
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            background-color: #00ff00;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+            margin-left: 2px;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* Botones invisibles que actúan al dar Enter, pero los dejamos por si están en móvil */
+        button {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover { background-color: #00cc00; }
+
+        #matriz-salida {
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div id="pantalla-login">
+        <h1>SISTEMA MAESTRO - LEGIÓN OBSIDIANA</h1>
+        <p>CONEXIÓN ENCRIPTADA ESTABLECIDA...</p>
+        <p>POR FAVOR, IDENTIFÍQUESE.</p>
+        <br>
+        
+        <div class="input-line">
+            <span class="prompt">USER:</span>
+            <input type="text" id="user-input" autocomplete="off" spellcheck="false" autofocus>
+        </div>
+        <div class="input-line">
+            <span class="prompt">PASS:</span>
+            <input type="password" id="pass-input" autocomplete="off">
+        </div>
+        <button onclick="verificarLogin()">AUTENTICAR</button>
+        <p id="error-login" class="rojo oculto">>>> ERROR: CREDENCIALES INVÁLIDAS. INTENTE DE NUEVO.</p>
+    </div>
+
+    <div id="pantalla-comando" class="oculto">
+        <h2 class="rojo">⚠️ ADVERTENCIA: PEM ARMADO ⚠️</h2>
+        <p>TIEMPO ESTIMADO PARA DETONACIÓN: CRÍTICO</p>
+        <p>ACCESO ROOT CONCEDIDO. ESPERANDO PROTOCOLO DE ANULACIÓN...</p>
+        <br>
+        <div class="input-line">
+            <span class="prompt">root@obsidiana:~#</span>
+            <input type="text" id="comando-input" autocomplete="off" spellcheck="false" style="width: 70%;">
+        </div>
+        <button onclick="verificarComando()">EJECUTAR</button>
+        <p id="error-comando" class="rojo oculto">>>> ERROR: SINTAXIS INVÁLIDA O DATOS INCORRECTOS.</p>
+    </div>
+
+    <div id="pantalla-victoria" class="oculto">
+        <div id="matriz-salida"></div>
+    </div>
+
+</div>
+
+<script>
+    // --- LÓGICA DEL JUEGO ---
+
+    // 1. Validar el Login
+    function verificarLogin() {
+        // Obtenemos los valores y los pasamos a minúsculas sin espacios extra
+        let user = document.getElementById("user-input").value.trim().toLowerCase();
+        let pass = document.getElementById("pass-input").value.trim().toLowerCase();
+        
+        if (user === "root_obsidiana" && pass === "iloveu_admin") {
+            // Ocultar login, mostrar consola de comandos
+            document.getElementById("pantalla-login").classList.add("oculto");
+            document.getElementById("pantalla-comando").classList.remove("oculto");
+            document.getElementById("comando-input").focus();
+        } else {
+            // Mostrar error
+            document.getElementById("error-login").classList.remove("oculto");
+        }
+    }
+
+    // 2. Validar el Comando Final
+    function verificarComando() {
+        let comandoReal = document.getElementById("comando-input").value;
+        // Limpiar el comando: minúsculas, y cambiar dobles espacios por espacio simple por si acaso
+        let comandoLimpio = comandoReal.trim().toLowerCase().replace(/\s+/g, ' ');
+        
+        // El comando exacto que diseñamos
+        let comandoCorrecto = "kill_pem -bases anticitera_little -g 14 -k amor_bosque_rosa";
+
+        if (comandoLimpio === comandoCorrecto) {
+            document.getElementById("pantalla-comando").classList.add("oculto");
+            document.getElementById("pantalla-victoria").classList.remove("oculto");
+            iniciarSecuenciaVictoria();
+        } else {
+            document.getElementById("error-comando").classList.remove("oculto");
+        }
+    }
+
+    // 3. Efecto Visual de Hackeo Final
+    function iniciarSecuenciaVictoria() {
+        const lineas = [
+            "EJECUTANDO PROTOCOLO 'kill_pem'...",
+            "BYPASSEANDO FIREWALL PRINCIPAL........ [OK]",
+            "FORZANDO APAGADO DE CAPACITORES....... [OK]",
+            "DESENCRIPTANDO NÚCLEO................. [OK]",
+            " ",
+            "==========================================",
+            "SISTEMA COMPROMETIDO. PEM DESACTIVADO.",
+            "CIUDAD DE MORELIA A SALVO.",
+            "BUEN TRABAJO, AGENTES.",
+            "=========================================="
+        ];
+
+        let contenedor = document.getElementById("matriz-salida");
+        let i = 0;
+
+        function escribirLinea() {
+            if (i < lineas.length) {
+                // Agregar la línea actual
+                let p = document.createElement("div");
+                p.textContent = lineas[i];
+                
+                // Si son las últimas líneas de victoria, hacerlas brillar
+                if (i >= 6) {
+                    p.style.fontWeight = "bold";
+                    p.style.fontSize = "1.5em";
+                    p.style.color = "#00ffff"; // Cyan para destacar
+                    p.style.textShadow = "0 0 10px #00ffff";
+                }
+
+                contenedor.appendChild(p);
+                i++;
+                // Velocidad de escritura: rápido al principio, una pausa dramática antes del final
+                let velocidad = (i === 6) ? 1500 : 400; 
+                setTimeout(escribirLinea, velocidad);
+            }
+        }
+        escribirLinea();
+    }
+
+    // --- MEJORAS DE USABILIDAD ---
+    // Permitir usar la tecla "Enter" para enviar formularios en lugar de tocar el botón
+    document.getElementById("pass-input").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") verificarLogin();
+    });
+    
+    document.getElementById("comando-input").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") verificarComando();
+    });
+</script>
+
+</body>
+</html>
